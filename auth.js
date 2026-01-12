@@ -146,6 +146,24 @@
     });
   }
 
+  // Login with email + password
+  async function login(email, password){
+    const c = ensureClient();
+    if (!c) throw new Error('Supabase not available');
+    const { data, error } = await c.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data;
+  }
+
+  // Sign up with email + password
+  async function signup(email, password){
+    const c = ensureClient();
+    if (!c) throw new Error('Supabase not available');
+    const { data, error } = await c.auth.signUp({ email, password });
+    if (error) throw error;
+    return data;
+  }
+
   // Expose a helper for login page to trigger magic link
   async function sendMagicLink(email){
     const c = ensureClient();
@@ -159,7 +177,7 @@
     return true;
   }
 
-  window.XAYTHEON_AUTH = { ensureClient, getSession, handleAuthState, sendMagicLink };
+  window.XAYTHEON_AUTH = { ensureClient, getSession, handleAuthState, sendMagicLink, login, signup };
 
   // Initialize on DOM ready
   window.addEventListener('DOMContentLoaded', handleAuthState);
